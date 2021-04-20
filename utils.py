@@ -1,0 +1,15 @@
+import random
+import pygame, sys, os
+from pygame.locals import *
+import argparse
+import math
+
+BACKGROUND_COLOR = (95,158,160)
+WIDTH = 1280
+HEIGHT = 720
+PLAYER_DIMENSIONS = (WIDTH // 10, HEIGHT // 4)
+PLAYER_VELOCITY = 10
+SHURIKEN_DIMENSIONS = (WIDTH // 30, HEIGHT // 10)
+SHURIKEN_SPEED = 7
+BALLOON_SPEED = 2
+BALLOON_DIMENSIONS = (WIDTH // 20, HEIGHT // 7)
