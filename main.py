@@ -27,7 +27,9 @@ class Game:
             pos = [random.uniform(WIDTH / 3, WIDTH), random.uniform(5 * HEIGHT, HEIGHT)]
             self.balloon = Balloon(pos)
             self.gameObjects.append(self.balloon)
-
+        
+        self.arrow = Arrow([PLAYER_DIMENSIONS[0] // 2.17, PLAYER_DIMENSIONS[1] // 2.75])
+        self.gameObjects.append(self.arrow)
 
     def run(self):
         while True:
@@ -44,6 +46,7 @@ class Game:
             gameObject.update()
 
     def input(self):
+        has_been_pressed = 0
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -51,14 +54,36 @@ class Game:
                 if event.key == K_q:
                     pygame.quit()
                 if event.key == K_w:
-                    self.player.moveUp()
+                    self.player.updateY = -PLAYER_VELOCITY
+                    self.arrow.updateY = -PLAYER_VELOCITY
                 if event.key == K_s:
-                    self.player.moveDown()
+                    self.player.updateY = PLAYER_VELOCITY
+                    self.arrow.updateY = PLAYER_VELOCITY
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_w or event.key == pygame.K_s:
+                    self.player.updateY = 0
+                    self.arrow.updateY = 0
+            if event.type == MOUSEBUTTONDOWN:
+                # Add arrow speed
+                has_been_pressed = 1
+                self.arrow.update_speed += SPEED_INCREASE
+                if event.type == MOUSEBUTTONUP:
+                   self.arrow.updateX = 0
+                   self.arrow.pos = [PLAYER_DIMENSIONS[0] // 2.17, PLAYER_DIMENSIONS[1] // 2.75]
+            if event.type == MOUSEBUTTONUP:
+                # Release arrow
+                if event.type == MOUSEBUTTONDOWN:
+                   self.arrow.update_speed = 0
+                
+                has_been_pressed = 0
+
+                    
             # if event.type == MOUSEMOTION:
             #     mouseX, mouseY = event.pos
+            #     # print(mouseX, mouseY)
             #     rel_x, rel_y = mouseX, mouseY - self.player.y
             #     angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
-            #     self.player.rotate(angle)
+            #     self.player.rotate(self.window, angle)
                 
 
                 
@@ -75,7 +100,6 @@ def main():
     """Funcția main.
 
     """
-    # TODO 1.3
     game = Game()
     game.run()
 
