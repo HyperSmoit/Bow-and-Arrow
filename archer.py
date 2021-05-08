@@ -7,34 +7,46 @@ class Player(pygame.sprite.Sprite):
         self.image = None
         self.rect = Rect(0, 0, 0, 0)
         self.pos = pos
+        self.updateY = 0
         self.y = 0
         self.faceVector = [1,0]
 
     def draw(self):
-        self.image = pygame.transform.scale(pygame.image.load("archer.png").convert_alpha(), PLAYER_DIMENSIONS)
-        self.image.set_colorkey((255, 255, 255))
-        self.rect = self.image.get_rect() 
+        self.image = pygame.transform.scale(pygame.image.load("cupid.png").convert_alpha(), PLAYER_DIMENSIONS)
+        # self.image.set_colorkey((255, 255, 255))
+        self.rect = self.image.get_rect()
+        #rect.move_ip
       
     def update(self):
-        self.rotate()
+        # self.rotate()
+        self.y += self.updateY
         self.rect.move_ip(0, self.y)
-        if self.rect.top > HEIGHT:
-            self.rect.top = HEIGHT
-        if self.rect.bottom < 0:
-            self.rect.bottom = 0
+        if self.rect.bottom > HEIGHT:
+            self.rect.bottom = HEIGHT
+        if self.rect.top < 0:
+            self.rect.top = 0
         self.pos[1] = self.y
+        # print(self.rect.top)
+        # print(self.rect.bottom)
         
-    def moveUp(self):
-        self.y += -PLAYER_VELOCITY
+    # def moveUp(self):
+        # self.y += -PLAYER_VELOCITY
 
-    def moveDown(self):
-        self.y += PLAYER_VELOCITY
-    def rotate(self):
-        mouse_pos = pygame.mouse.get_pos()
-        rel_x, rel_y = mouse_pos[0], mouse_pos[1] - self.y
-        angle = -math.degrees(math.atan2(rel_y, rel_x))
+    # def moveDown(self):
+        # self.y += PLAYER_VELOCITY
+        
+    def rotate(self, angle):
+    #     mouse_pos = pygame.mouse.get_pos()
+    #     rel_x, rel_y = mouse_pos[0], HEIGHT - mouse_pos[1] - self.y
+    #     angle = math.degrees(math.atan2(rel_y, rel_x))
+        # print(angle)
         # Rotate the image.
-        self.image = pygame.transform.rotozoom(self.image, angle, 1)
         # Update the rect and keep the center at the old position.
-        self.rect = self.image.get_rect(center=self.rect.center)
-
+        rotated_image = pygame.transform.rotate(self.image, angle)
+        new_rect = rotated_image.get_rect(center = self.image.get_rect().center)
+        # surf.blit(rotated_image, new_rect)
+        print(self.rect)
+        self.image = rotated_image
+        self.rect = new_rect
+        print(self.rect)
+        print()
