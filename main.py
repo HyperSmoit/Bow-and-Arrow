@@ -17,6 +17,7 @@ class Game:
         self.gameObjects = []
         self.player = Player([0,1])
         self.gameObjects.append(self.player)
+        self.score = 0
 
         for i in range (0, 20):
             pos = [(random.uniform(2.6, 6.7)) * WIDTH / 2,random.randint(0, HEIGHT)]
@@ -32,16 +33,30 @@ class Game:
         self.gameObjects.append(self.arrow)
 
     def run(self):
-        while True:
+        while self.gameObjects[0].life > 0:#jocul se opreste cand raman fara vieti
             self.draw()
             self.input()
             self.update()
+        while True:
+            self.final()
+            self.input()
+        
             
 
     def collisionDetection(self):
-        pass
-
+        listshuriken=[x for x in self.gameObjects if isinstance(x,Shuriken)]
+        listballoon=[x for x in self.gameObjects if isinstance(x,Balloon)]
+        for x in listshuriken:
+            if self.gameObjects[0].collisionArcher(x):
+                self.gameObjects[0].oncollisionArher()
+                self.gameObjects.remove(x)
+        for x in listballoon:
+            if self.gameObjects[-1].collisionArrow(x):
+                self.score += 20
+                self.gameObjects.remove(x)
+        
     def update(self):
+        self.collisionDetection()
         for gameObject in self.gameObjects:
             gameObject.update()
 
@@ -90,11 +105,29 @@ class Game:
 
     def draw(self):
         self.window.fill(BACKGROUND_COLOR)
+
+        myfont1 = pygame.font.SysFont("Comic Sans MS", 20)
+        label1=myfont1.render("Score " + str(self.score), 1, (255,255,255))
+        self.window.blit(label1,(WIDTH//2, 10))
+
         for gameObject in self.gameObjects:
             gameObject.draw()
             self.window.blit(gameObject.image, gameObject.pos)
         pygame.display.update()
         frame_rate.tick(60)
+    
+    def final(self):
+        self.window.fill(BACKGROUND_COLOR)
+
+        myfont2 = pygame.font.SysFont("Comic Sans MS", 100)
+        label2=myfont2.render("GAME OVER", 1, (0,0,0))
+        self.window.blit(label2,(WIDTH - 500, HEIGHT - 100))
+
+        myfont3 = pygame.font.SysFont("Comic Sans MS", 80)
+        label3=myfont3.render("Score " + str(self.score), 1, (255,255,255))
+        self.window.blit(label3,(WIDTH//2-100,HEIGHT//2-100))
+        pygame.display.update()
+
 
 def main():
     """Funcția main.

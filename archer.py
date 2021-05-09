@@ -10,6 +10,7 @@ class Player(pygame.sprite.Sprite):
         self.updateY = 0
         self.y = 0
         self.faceVector = [1,0]
+        self.life = 3
 
     def draw(self):
         self.image = pygame.transform.scale(pygame.image.load("cupid.png").convert_alpha(), PLAYER_DIMENSIONS)
@@ -50,3 +51,12 @@ class Player(pygame.sprite.Sprite):
         self.rect = new_rect
         print(self.rect)
         print()
+
+    def collisionArcher(self,other):
+        if other.pos[0] < 128:#latimea pozei
+            if other.pos[1] > self.pos[1] and other.pos[1] < self.pos[1]+180:
+                return True 
+        return False
+    
+    def oncollisionArher(self):
+        self.life -= 1

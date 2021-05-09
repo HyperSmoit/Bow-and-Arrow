@@ -33,3 +33,10 @@ class Arrow(pygame.sprite.Sprite):
         #     self.rect.bottom = 0
         # self.pos[1] = self.y
         # Arrow moves
+
+    def collisionArrow(self, other):
+        #balonul are dimensiunile 64x102
+        if self.pos[0] > (other.pos[0] - 1) and self.pos[0] < (other.pos[0] + 65):
+            if self.pos[1] > (other.pos[1] - 1) and self.pos[1] < (other.pos[0] + 103):
+                return True 
+        return False
