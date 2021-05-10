@@ -9,10 +9,11 @@ class Balloon(pygame.sprite.Sprite):
         self.rect = Rect(0, 0, 0, 0)
         self.pos = pos
     
-    def draw(self):
+    def draw(self, surf):
         self.image = pygame.transform.scale(pygame.image.load("balloon.png").convert(), BALLOON_DIMENSIONS)
         self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()
+        surf.blit(self.image, self.pos)
 
     def update(self):
         # Move up
