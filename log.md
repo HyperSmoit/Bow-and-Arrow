@@ -5,7 +5,13 @@
 * Added shurikens and implemented their movement
 * Added balloons and implemented their movement
 * Set the background for the game
+
 ## Anca
+
+* Added arrow/balloon collison
+* Added Archer/shurikens collison
+* Added score bar
+* Set the end of the game
 
 ## Miruna:
 
