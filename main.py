@@ -24,8 +24,8 @@ class Game:
         self.score = 0
 
         # Add the shurikens and generate their initial position
-        for _ in range (0, 20):
-            pos = [(random.uniform(2.6, 6.7)) * WIDTH / 2,random.randint(0, HEIGHT)]
+        for _ in range (0, 10):
+            pos = [(random.uniform(2.6, 6.7)) * WIDTH / 2, random.randint(0, HEIGHT)]
             self.shuriken = Shuriken(pos)
             self.gameObjects.append(self.shuriken)
 
@@ -64,21 +64,21 @@ class Game:
             # Collision with archer
             if self.gameObjects[0].collisionArcher(x):
                 self.gameObjects[0].oncollisionArcher()
-                self.gameObjects.remove(x)
+                x.refresh()
             # Collision with arrow
             if self.gameObjects[-1].collisionArrow(x):
                 self.score += SHURIKEN_POINTS
-                self.gameObjects.remove(x)
+                x.refresh()
         for x in listballoon:
             # Collision with arrow
             if self.gameObjects[-1].collisionArrow(x):
                 self.score += BALLON_POINTS
-                self.gameObjects.remove(x)
+                x.refresh()
         for x in listcloud:
             #  Collision with arrow
             if self.gameObjects[-1].collisionArrow(x):
                 self.score -= CLOUD_POINTS
-                self.gameObjects.remove(x)
+                x.refresh()
                 
         
     def update(self):
@@ -88,8 +88,7 @@ class Game:
         self.gameObjects[-1].update(self.player.y)
 
     def input(self):
-        # variable to check if the first arrow has been launched
-        # has_been_pressed = 0
+        # Check for keyboard input + mouse input
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -107,36 +106,22 @@ class Game:
                     self.player.updateY = 0
                     self.arrow.updateY = 0
             if event.type == MOUSEBUTTONDOWN:
-                # Add arrow speed
-                # has_been_pressed = 1
                 if self.arrow.launched == False:
                     self.arrow.update_speed += SPEED_INCREASE
-                
             if event.type == MOUSEBUTTONUP:
                 if self.arrow.launched == False:
-                    self.arrow.launched = True
-                # self.arrow.updateX = self.arrow.current_speed
-                # self.arrow.pos = [PLAYER_DIMENSIONS[0] // 2.17, PLAYER_DIMENSIONS[1] // 2.75]
-                # self.arrow.update_speed = 0
-                # self.arrow.current_speed = ARROW_INITIAL_SPEED
-                # print(self.arrow.updateX)
-            # if event.type == MOUSEBUTTONUP:
-            #     if event.type == MOUSEBUTTONDOWN:
-            #        self.arrow.update_speed = 0
-            #        self.arrow.updateX = 0
-            #        self.arrow.updateY = 0                
+                    self.arrow.launched = True               
 
     def draw(self):
         self.window.fill(BACKGROUND_COLOR)
 
         # Draw the score
         myfont1 = pygame.font.SysFont("Comic Sans MS", 20)
-        label1=myfont1.render("Score " + str(self.score), 1, (255,255,255))
-        self.window.blit(label1,(WIDTH//2, 10))
+        label1 = myfont1.render("Score " + str(self.score), 1, (255, 255, 255))
+        self.window.blit(label1,(WIDTH // 2, 10))
 
         for gameObject in self.gameObjects:
             gameObject.draw(self.window)
-            # self.window.blit(gameObject.image, gameObject.pos)
         pygame.display.update()
         frame_rate.tick(60)
     
@@ -144,11 +129,11 @@ class Game:
         self.window.fill(BACKGROUND_COLOR)
 
         myfont2 = pygame.font.SysFont("Comic Sans MS", 100)
-        label2=myfont2.render("GAME OVER", 1, (0,0,0))
+        label2 = myfont2.render("GAME OVER", 1, (0, 0, 0))
         self.window.blit(label2,(WIDTH - 500, HEIGHT - 100))
 
         myfont3 = pygame.font.SysFont("Comic Sans MS", 80)
-        label3=myfont3.render("Score " + str(self.score), 1, (255,255,255))
+        label3 = myfont3.render("Score: " + str(self.score), 1, (255, 255, 255))
         self.window.blit(label3,(WIDTH // 2 - 100, HEIGHT // 2 - 100))
         pygame.display.update()
 
