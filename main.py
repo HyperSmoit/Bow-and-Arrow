@@ -83,12 +83,13 @@ class Game:
         
     def update(self):
         self.collisionDetection()
-        for gameObject in self.gameObjects:
-            gameObject.update()
+        for i in range(0, len(self.gameObjects) - 1):
+            self.gameObjects[i].update()
+        self.gameObjects[-1].update(self.player.y)
 
     def input(self):
         # variable to check if the first arrow has been launched
-        has_been_pressed = 0
+        # has_been_pressed = 0
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -106,21 +107,24 @@ class Game:
                     self.player.updateY = 0
                     self.arrow.updateY = 0
             if event.type == MOUSEBUTTONDOWN:
-                # TODO
                 # Add arrow speed
-                has_been_pressed = 1
-                self.arrow.update_speed += SPEED_INCREASE
-                if event.type == MOUSEBUTTONUP:
-                    self.arrow.updateX = self.arrow.current_speed
-                    self.arrow.pos = [PLAYER_DIMENSIONS[0] // 2.17, PLAYER_DIMENSIONS[1] // 2.75]
-                    self.arrow.update_speed = 0
-                    self.arrow.current_speed = ARROW_INITIAL_SPEED
-                    print(self.arrow.updateX)
+                # has_been_pressed = 1
+                if self.arrow.launched == False:
+                    self.arrow.update_speed += SPEED_INCREASE
+                
             if event.type == MOUSEBUTTONUP:
-                if event.type == MOUSEBUTTONDOWN:
-                   self.arrow.update_speed = 0
-                   self.arrow.updateX = 0
-                   self.arrow.updateY = 0                
+                if self.arrow.launched == False:
+                    self.arrow.launched = True
+                # self.arrow.updateX = self.arrow.current_speed
+                # self.arrow.pos = [PLAYER_DIMENSIONS[0] // 2.17, PLAYER_DIMENSIONS[1] // 2.75]
+                # self.arrow.update_speed = 0
+                # self.arrow.current_speed = ARROW_INITIAL_SPEED
+                # print(self.arrow.updateX)
+            # if event.type == MOUSEBUTTONUP:
+            #     if event.type == MOUSEBUTTONDOWN:
+            #        self.arrow.update_speed = 0
+            #        self.arrow.updateX = 0
+            #        self.arrow.updateY = 0                
 
     def draw(self):
         self.window.fill(BACKGROUND_COLOR)
@@ -131,8 +135,8 @@ class Game:
         self.window.blit(label1,(WIDTH//2, 10))
 
         for gameObject in self.gameObjects:
-            gameObject.draw()
-            self.window.blit(gameObject.image, gameObject.pos)
+            gameObject.draw(self.window)
+            # self.window.blit(gameObject.image, gameObject.pos)
         pygame.display.update()
         frame_rate.tick(60)
     
