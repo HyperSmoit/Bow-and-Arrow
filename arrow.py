@@ -24,19 +24,20 @@ class Arrow(pygame.sprite.Sprite):
         self.rect.move_ip(self.x, self.y)
         self.pos[0] = self.x
         self.pos[1] = self.y
-        self.current_speed += self.update_speed
-        # self.rotate()
-        # self.rect.move_ip(0, self.y)
-        # if self.rect.top > HEIGHT:
-        #     self.rect.top = HEIGHT
-        # if self.rect.bottom < 0:
-        #     self.rect.bottom = 0
-        # self.pos[1] = self.y
-        # Arrow moves
+        if self.current_speed < ARROW_MAX_SPEED:
+            self.current_speed += self.update_speed
+        else:
+            self.current_speed = ARROW_INITIAL_SPEED
+
+    def rotate(self):
+        # TODO
+        pass
+        
 
     def collisionArrow(self, other):
-        #balonul are dimensiunile 64x102
-        if self.pos[0] > (other.pos[0] - 1) and self.pos[0] < (other.pos[0] + 65):
-            if self.pos[1] > (other.pos[1] - 1) and self.pos[1] < (other.pos[0] + 103):
-                return True 
+        # Collision with another object
+        width, height = pygame.Surface.get_size(other.image)
+        if self.pos[0] > (other.pos[0] - 1) and self.pos[0] < (other.pos[0] + width + 1):
+            if self.pos[1] > (other.pos[1] - 1) and self.pos[1] < (other.pos[0] + height + 1):
+                return True
         return False

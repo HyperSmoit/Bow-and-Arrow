@@ -14,6 +14,7 @@ class Shuriken(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def update(self):
+        # Move to the left
         self.pos[0] -= SHURIKEN_SPEED
         self.rect.move_ip(self.pos[0], 0)
         
