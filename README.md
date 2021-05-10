@@ -1,7 +1,6 @@
 # Bow and Arrow game implementation
 
 ## Controls
-* Press 'P-key' to pause the game
 * Move the Archer using 'W-key' and 'S-key'
 * Press 'Q-key' to quit
 * Move mouse to aim and LMB to shoot. The longer the press the faster the arrow will go.
