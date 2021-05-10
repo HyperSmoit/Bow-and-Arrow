@@ -18,11 +18,8 @@ class Arrow(pygame.sprite.Sprite):
     
     def draw(self, surf):
         self.image = pygame.transform.scale(pygame.image.load("arrow.png").convert_alpha(), ARROW_DIMENSIONS)
-        # self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()
-        # if self.launched == True:
-        #     surf.blit(self.image, self.pos)
-        # else:
+        # Rotate initial image, then draw the obtained rotated image using blit
         old_center = tuple(sum(x) for x in zip(self.rect.center, (self.x, self.y)))
         rotated_image = pygame.transform.rotate(self.image, self.angle)
         new_rect = rotated_image.get_rect(center = self.image.get_rect().center)
@@ -30,7 +27,9 @@ class Arrow(pygame.sprite.Sprite):
         surf.blit(rotated_image, new_rect) 
 
     def update(self, playerY):
+        # Update coordinates and angle
         if self.launched == False:
+            # arrow is not launched (initial position)
             mouse_pos = pygame.mouse.get_pos()
             rel_x, rel_y = mouse_pos[0], mouse_pos[1] - self.y
             self.angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
@@ -43,6 +42,7 @@ class Arrow(pygame.sprite.Sprite):
             else:
                 self.current_speed = ARROW_INITIAL_SPEED
         else:
+            # arrow is launched (in motion)
             self.updateX = self.current_speed * math.cos(math.radians(self.angle))
             self.updateY = self.current_speed * math.sin(math.radians(-self.angle))
             self.x += self.updateX
@@ -63,6 +63,5 @@ class Arrow(pygame.sprite.Sprite):
         width, height = pygame.Surface.get_size(other.image)
         if self.pos[0] + WIDTH // 20 > (other.pos[0] - 1) and self.pos[0] + WIDTH // 20 < (other.pos[0] + width + 1):
             if self.pos[1] > (other.pos[1] - 1) and self.pos[1] < (other.pos[0] + height + 1):
-                print('collision', other)
                 return True
         return False

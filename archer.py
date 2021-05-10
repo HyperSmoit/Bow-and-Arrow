@@ -1,4 +1,4 @@
-from utils import pygame, PLAYER_DIMENSIONS, PLAYER_VELOCITY, HEIGHT, math
+from utils import pygame, PLAYER_DIMENSIONS, PLAYER_VELOCITY, HEIGHT, math, WIDTH
 from pygame.locals import *
 
 class Player(pygame.sprite.Sprite):
@@ -9,30 +9,31 @@ class Player(pygame.sprite.Sprite):
         self.pos = pos
         self.updateY = 0
         self.y = 0
-        self.faceVector = [1,0]
         self.life = 3
         self.angle = 0
 
     def draw(self, surf):
         self.image = pygame.transform.scale(pygame.image.load("cupid.png").convert_alpha(), PLAYER_DIMENSIONS)
-        # self.image.set_colorkey((255, 255, 255))
         self.rect = self.image.get_rect()
-
+        # Rotate initial image, then draw the obtained rotated image using blit
         old_center = tuple(sum(x) for x in zip(self.rect.center, (0, self.y)))
         rotated_image = pygame.transform.rotate(self.image, self.angle)
         new_rect = rotated_image.get_rect(center = self.image.get_rect().center)
         new_rect.center = old_center
         surf.blit(rotated_image, new_rect)
+        # Draw lives
+        myfont1 = pygame.font.SysFont("Comic Sans MS", 20)
+        label1 = myfont1.render("Lives: " + str(self.life), 1, (255, 255, 255))
+        surf.blit(label1,(WIDTH // 2 + 1, 30))
       
-    # TODO
     def update(self):
+        # Update coordinates and angle
         mouse_pos = pygame.mouse.get_pos()
         rel_x, rel_y = mouse_pos[0], mouse_pos[1] - self.y
         self.angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)        
         if (self.y + self.updateY >= 0) and (self.y + self.updateY <= HEIGHT - self.rect.height):
             self.y += self.updateY
             self.rect.move_ip(0, self.y)
-            # print(self.rect)
             self.pos[1] = self.y
 
     def collisionArcher(self, other):
